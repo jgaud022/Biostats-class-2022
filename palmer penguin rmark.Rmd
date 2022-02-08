@@ -1,0 +1,103 @@
+---
+title: "Palmer penguin report"
+author: "Jessica Gaudet"
+date: "01/02/2022"
+bibliography: bibliography_HEB.bib
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Practical one  
+Report done on  
+__palmer penguins__
+
+
+
+```{r echo=FALSE}
+library(palmerpenguins)
+data(package='palmerpenguins')
+```
+
+```{r message=FALSE}
+library(tidyverse)
+```
+```{r}
+penguins%>%
+slice (1:10)%>%
+knitr::kable()
+```
+
+
+
+## new section
+There are `r nrow(penguins)` penguins spread out on `r length(unique(penguins$island))` islands and there is `r length(unique(penguins$species))` species  
+ ( not a appostrophe but a accent grave for the inline code)  
+ 
+#### means of penguin traits 
+
+```{r echo = FALSE}
+penguins %>%
+  group_by(species) %>%
+  summarize(across(where(is.numeric), mean, na.rm = TRUE))
+```
+
+#### graphical exploration
+```{r, fig.cap="Bodymass distribution by penguin species"}
+penguins %>%
+  ggplot() +
+  aes(x = body_mass_g) +
+  geom_histogram(aes(fill = species),
+                 alpha = 0.5,
+                 position = "identity") +
+  scale_fill_manual(values = c("blue","yellow","brown")) +
+  theme_minimal() +
+  labs(x = "Body mass (g)",
+       y = "Frequency",
+       title = "Penguin body mass")
+```
+#### Linear regression
+
+```{r, fig.cap = "Checking assumptions of the model"}
+m1 <- lm(bill_length_mm ~  flipper_length_mm + body_mass_g + sex, data = penguins)
+summary(m1)
+par(mfrow= c(2,2))
+plot(m1)
+```
+```{r}
+@article{Gorman2014,
+author = {Gorman, Kristen B and Williams, Tony D and Fraser, William R},
+doi = {10.1371/journal.pone.0090081},
+file = {:Users/jgaud/Desktop/Ecological_Sexual_Dimorphism_a.PDF:PDF},
+number = {3},
+title = {{Ecological Sexual Dimorphism and Environmental Variability within a Community of Antarctic Penguins ( Genus Pygoscelis )}},
+volume = {9},
+year = {2014}
+}
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
